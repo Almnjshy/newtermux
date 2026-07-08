@@ -6,32 +6,35 @@ interface Props {
 
 interface State {
   hasError: boolean
+  error: any
 }
 
 class ErrorBoundary extends Component<Props, State> {
-  constructor(props: Props) {
-    super(props)
-
-    this.state = {
-      hasError: false,
-    }
+  state: State = {
+    hasError: false,
+    error: null
   }
 
-  static getDerivedStateFromError(): State {
+  static getDerivedStateFromError(error: any) {
     return {
       hasError: true,
+      error
     }
   }
 
   componentDidCatch(error: Error, info: ErrorInfo) {
-    console.error('ErrorBoundary:', error, info)
+    console.error('ERROR:', error)
+    console.error('INFO:', info)
   }
 
   render() {
     if (this.state.hasError) {
       return (
-        <div className="flex h-full items-center justify-center text-white">
-          حدث خطأ في اللعبة
+        <div style={{padding:20, direction:'rtl'}}>
+          <h2>حدث خطأ في اللعبة</h2>
+          <pre style={{whiteSpace:'pre-wrap'}}>
+            {String(this.state.error?.message || this.state.error)}
+          </pre>
         </div>
       )
     }
