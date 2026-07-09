@@ -294,3 +294,39 @@ export const getAIMove = (
 
   return null
 }
+
+// ============================================================
+// DRAW FROM STOCK
+// ============================================================
+export const drawFromStock = (
+  state: GameState,
+  playerIndex: number
+): GameState => {
+
+  if (state.stock.length === 0) {
+    return state
+  }
+
+  const newStock = [...state.stock]
+  const tile = newStock.pop()
+
+  if (!tile) {
+    return state
+  }
+
+  const newPlayers = [...state.players]
+
+  newPlayers[playerIndex] = {
+    ...newPlayers[playerIndex],
+    hand: [
+      ...newPlayers[playerIndex].hand,
+      tile
+    ]
+  }
+
+  return {
+    ...state,
+    players: newPlayers,
+    stock: newStock
+  }
+}
